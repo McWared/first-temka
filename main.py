@@ -8,6 +8,12 @@ class Calculator_UA:
         self.window.geometry('400x520')
         self.window.title('Calculator UA')
 
+    def _create_calculation_frame(self):
+        pass
+
+    def _create_buttons_frame(self):
+        pass
+
     def run(self):
         self.window.mainloop()
 
