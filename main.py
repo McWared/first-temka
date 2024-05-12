@@ -5,7 +5,7 @@ import tkinter as tk
 class Calculator_UA:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.geometry = '500x800'
+        self.window.geometry('400x520')
         self.window.title('Calculator UA')
 
     def run(self):
