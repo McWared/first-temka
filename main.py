@@ -26,7 +26,10 @@ class Calculator_UA:
         return frame
 
     def _create_buttons_frame(self):
-        pass
+        frame = Frame(self.window, height='320')
+        frame.pack(expand=True, fill='both')
+        return frame
+
 
     def _create_buttons(self):
         pass
