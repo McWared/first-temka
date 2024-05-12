@@ -14,7 +14,12 @@ class Calculator_UA:
     def _create_buttons_frame(self):
         pass
 
+    def _create_buttons(self):
+        pass
+
     def run(self):
+        self._create_calculation_frame()
+        self._create_buttons_frame()
         self.window.mainloop()
 
 
