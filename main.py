@@ -44,7 +44,6 @@ class Calculator_UA:
         self.create_parentheses_buttons()
         self.create_all_clear_button()
         self.create_clear_button()
-
     def create_display_label(self) -> Label:
         """
         Creates display label
@@ -84,7 +83,7 @@ class Calculator_UA:
         i = 0
 
         for operator, symbol in self.operations.items():
-            button = Button(self.buttons_frame, text=symbol, borderwidth=0, font=('Arial', 24, 'bold'), command=lambda x=symbol: self.append_operator(x))
+            button = Button(self.buttons_frame, text=symbol, borderwidth=0, font=('Arial', 24, 'bold'), command=lambda x=symbol, y=operator: self.append_operator(x, y))
             button.grid(row=i, column=4, sticky=NSEW)
             i += 1
 
@@ -134,14 +133,14 @@ class Calculator_UA:
         self.total_expression += str(value)
         self.update_label()
         
-    def append_operator(self, operator) -> None:
+    def append_operator(self, symbol, operator) -> None:
         """
         Updates the expression, adding new operator symbol to it
         - args: 
             operator: str
         """
+        self.expression += symbol
         self.total_expression += operator
-        self.expression = ''
         self.update_label()
 
     def all_clear(self) -> None:
@@ -149,6 +148,7 @@ class Calculator_UA:
         Full clears the expression
         """
         self.expression = ''
+        self.total_expression = ''
         self.update_label()
 
     def clear(self) -> None:
@@ -156,14 +156,19 @@ class Calculator_UA:
         Deletes the last symbol in the expression
         """
         self.expression = self.expression[:-1]
+        self.total_expression = self.total_expression[:-1]
         self.update_label()
 
     def evaluation(self) -> None:
         """
         Evaluates the expression
         """
-        self.expression = str(eval(self.total_expression))
-        self.update_label()
+        try:
+            self.expression = str(eval(self.total_expression))
+            self.update_label()
+        except SyntaxError:
+            self.expression = 'Error'
+            self.update_label()
 
     def run(self) -> None:
         """
