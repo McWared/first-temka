@@ -1,7 +1,6 @@
 """Main file for Calculator"""
 from tkinter import *
 from tkinter import ttk
-from PIL import ImageTk, Image
 
 class Calculator_UA:
     """Calculator class that defining all stuff"""
