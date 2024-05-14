@@ -3,8 +3,10 @@ from tkinter import *
 from tkinter import ttk
 from decimal import Decimal
 
+
 class Calculator_UA:
     """Calculator class that defining all stuff"""
+
     def __init__(self) -> None:
         """
         Init object
@@ -24,15 +26,15 @@ class Calculator_UA:
         self.buttons_frame = self.create_buttons_frame()
 
         self.digits = {
-            7: (1,1), 8: (1,2), 9: (1,3),
-            4: (2,1), 5: (2,2), 6: (2,3),
-            1: (3,1), 2: (3,2), 3: (3,3),
-            0: (4,2)
+            7: (1, 1), 8: (1, 2), 9: (1, 3),
+            4: (2, 1), 5: (2, 2), 6: (2, 3),
+            1: (3, 1), 2: (3, 2), 3: (3, 3),
+            0: (4, 2)
         }
         self.operations = {'/': '\u00f7', '*': '\u00d7', '-': '-', '+': '+'}
 
         self.buttons_frame.rowconfigure(0, weight=1)
-        for x in range(1,5):
+        for x in range(1, 5):
             self.buttons_frame.rowconfigure(x, weight=1)
             self.buttons_frame.columnconfigure(x, weight=1)
 
@@ -54,10 +56,11 @@ class Calculator_UA:
         """
         Creates display label
         """
-        label = Label(self.calculation_frame, text=self.expression, anchor=E, fg='black', bg='lightgray', font=('Arial', 24, 'bold'))
+        label = Label(self.calculation_frame, text=self.expression, anchor=E, fg='black', bg='lightgray',
+                      font=('Arial', 24, 'bold'))
         label.pack(expand=True, fill='both')
         return label
-    
+
     def create_calculation_frame(self) -> Frame:
         """
         Creates frame for the expression area
@@ -79,7 +82,8 @@ class Calculator_UA:
         Creates buttons for all digits
         """
         for digit, grid_value in self.digits.items():
-            button = Button(self.buttons_frame, text=str(digit), borderwidth=0, font=('Arial', 24, 'bold'), command=lambda x=digit: self.update_expression(x))
+            button = Button(self.buttons_frame, text=str(digit), borderwidth=0, font=('Arial', 24, 'bold'),
+                            command=lambda x=digit: self.update_expression(x))
             button.grid(row=grid_value[0], column=grid_value[1], sticky=NSEW)
 
     def create_operations_buttons(self) -> None:
@@ -89,7 +93,8 @@ class Calculator_UA:
         i = 0
 
         for operator, symbol in self.operations.items():
-            button = Button(self.buttons_frame, text=symbol, borderwidth=0, font=('Arial', 24, 'bold'), command=lambda x=symbol, y=operator: self.append_operator(x, y))
+            button = Button(self.buttons_frame, text=symbol, borderwidth=0, font=('Arial', 24, 'bold'),
+                            command=lambda x=symbol, y=operator: self.append_operator(x, y))
             button.grid(row=i, column=4, sticky=NSEW)
             i += 1
 
@@ -97,39 +102,45 @@ class Calculator_UA:
         """
         Creates button for equal
         """
-        button = Button(self.buttons_frame, text='=', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.evaluation())
+        button = Button(self.buttons_frame, text='=', borderwidth=0, font=('Arial', 24, 'bold'),
+                        command=lambda: self.evaluation())
         button.grid(row=4, column=4, sticky=NSEW)
 
     def create_dot_button(self) -> None:
         """
         Creates button for dot
         """
-        button = Button(self.buttons_frame, text='.', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.append_dot('.'))
+        button = Button(self.buttons_frame, text='.', borderwidth=0, font=('Arial', 24, 'bold'),
+                        command=lambda: self.append_dot('.'))
         button.grid(row=4, column=3, sticky=NSEW)
-        
+
     def create_parentheses_buttons(self) -> None:
         """
         Creates buttons for parentheses
         """
-        button_1 = Button(self.buttons_frame, text='(', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.update_expression('('))
+        button_1 = Button(self.buttons_frame, text='(', borderwidth=0, font=('Arial', 24, 'bold'),
+                          command=lambda: self.update_expression('('))
         button_1.grid(row=0, column=2, sticky=NSEW)
-        button_2 = Button(self.buttons_frame, text=')', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.update_expression(')'))
+        button_2 = Button(self.buttons_frame, text=')', borderwidth=0, font=('Arial', 24, 'bold'),
+                          command=lambda: self.update_expression(')'))
         button_2.grid(row=0, column=3, sticky=NSEW)
 
     def create_all_clear_button(self) -> None:
         """
         Creates button for all clear
         """
-        button = Button(self.buttons_frame, text='C', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.all_clear())
+        button = Button(self.buttons_frame, text='C', borderwidth=0, font=('Arial', 24, 'bold'),
+                        command=lambda: self.all_clear())
         button.grid(row=0, column=1, sticky=NSEW)
 
     def create_clear_button(self) -> None:
         """
         Creates button for clear the last symbol
         """
-        button = Button(self.buttons_frame, text='<<', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.clear())
+        button = Button(self.buttons_frame, text='<<', borderwidth=0, font=('Arial', 24, 'bold'),
+                        command=lambda: self.clear())
         button.grid(row=4, column=1, sticky=NSEW)
-        
+
     def update_label(self) -> None:
         """
         Updates the text on the label
@@ -146,7 +157,7 @@ class Calculator_UA:
             self.expression += str(value)
             self.total_expression += str(value)
             self.update_label()
-        
+
     def append_operator(self, symbol, operator) -> None:
         """
         Updates the expression, adding new operator symbol to it
@@ -218,6 +229,7 @@ class Calculator_UA:
         Runs the window
         """
         self.window.mainloop()
+
 
 if __name__ == "__main__":
     calculator_ua = Calculator_UA()
