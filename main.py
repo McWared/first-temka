@@ -226,7 +226,6 @@ class CalculatorUA:
     def catch_errors(self, e):
         msg_forward = "'(' was never closed"
         msg_backward = "unmatched ')'"
-        msg_parentheses = "'int' object is not callable"
         if msg_forward in str(e):
             self.total_expression += ')'
             self.evaluation()
