@@ -233,15 +233,11 @@ class CalculatorUA:
         elif msg_backward in str(e):
             self.total_expression = '(' + self.total_expression
             self.evaluation()
-        elif msg_parentheses in str(e):
-            self.parentheses_without_operators()
         else:
             self.expression = 'Error'
             self.is_ERROR = True
             self.update_label()
 
-    def parentheses_without_operators(self):
-        pass
 
     def run(self) -> None:
         """
