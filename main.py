@@ -1,7 +1,6 @@
 """Main file for Calculator"""
 from tkinter import *
 
-
 class CalculatorUA:
     """Calculator class that defining all stuff"""
 
@@ -16,7 +15,7 @@ class CalculatorUA:
         self.total_expression = ''
         self.is_OPERATOR = False
         self.is_DOT = False
-        self.is_PARENTHESES = False
+        # self.is_PARENTHESES = False
         self.is_ERROR = False
 
         self.calculation_frame = self.create_calculation_frame()
@@ -152,6 +151,7 @@ class CalculatorUA:
             value: str | int
         """
         if not self.is_ERROR:
+            self.is_OPERATOR = False
             self.expression += str(value)
             self.total_expression += str(value)
             self.update_label()
@@ -217,10 +217,19 @@ class CalculatorUA:
         try:
             self.expression = str(round(eval(self.total_expression), 10))
             self.update_label()
-        except BaseException:
-            self.expression = 'Error'
-            self.is_ERROR = True
-            self.update_label()
+        except BaseException as e:
+            msg_forward = "'(' was never closed"
+            msg_backward = "unmatched ')'"
+            if msg_forward in str(e):
+                self.total_expression += ')'
+                self.evaluation()
+            elif msg_backward in str(e):
+                self.total_expression = '(' + self.total_expression
+                self.evaluation()
+            else:
+                self.expression = 'Error'
+                self.is_ERROR = True
+                self.update_label()
 
     def run(self) -> None:
         """
