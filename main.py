@@ -13,6 +13,9 @@ class Calculator_UA:
         self.window.title('Calculator UA')
         self.expression = ''
         self.total_expression = ''
+        self.is_OPERATOR = False
+        self.is_DOT = False
+        self.is_PARENTHESES = False
 
         self.calculation_frame = self.create_calculation_frame()
         self.display_label = self.create_display_label()
@@ -22,7 +25,7 @@ class Calculator_UA:
             7: (1,1), 8: (1,2), 9: (1,3),
             4: (2,1), 5: (2,2), 6: (2,3),
             1: (3,1), 2: (3,2), 3: (3,3),
-            0: (4,2), '.': (4,3)
+            0: (4,2)
         }
         self.operations = {'/': '\u00f7', '*': '\u00d7', '-': '-', '+': '+'}
 
@@ -39,10 +42,12 @@ class Calculator_UA:
         """
         self.create_operations_buttons()
         self.create_equal_button()
+        self.create_dot_button()
         self.create_digits_buttons()
         self.create_parentheses_buttons()
         self.create_all_clear_button()
         self.create_clear_button()
+
     def create_display_label(self) -> Label:
         """
         Creates display label
@@ -93,6 +98,13 @@ class Calculator_UA:
         button = Button(self.buttons_frame, text='=', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.evaluation())
         button.grid(row=4, column=4, sticky=NSEW)
 
+    def create_dot_button(self) -> None:
+        """
+        Creates button for dot
+        """
+        button = Button(self.buttons_frame, text='.', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.append_dot())
+        button.grid(row=4, column=3, sticky=NSEW)
+        
     def create_parentheses_buttons(self) -> None:
         """
         Creates buttons for parentheses
@@ -130,6 +142,7 @@ class Calculator_UA:
         """
         self.expression += str(value)
         self.total_expression += str(value)
+        self.is_OPERATOR = False
         self.update_label()
         
     def append_operator(self, symbol, operator) -> None:
@@ -138,16 +151,38 @@ class Calculator_UA:
         - args: 
             operator: str
         """
-        self.expression += symbol
-        self.total_expression += operator
-        self.update_label()
+        if self.is_OPERATOR:
+            pass
+        else:
+            self.is_OPERATOR = True
+            self.is_DOT = False
+            self.expression += symbol
+            self.total_expression += operator
+            self.update_label()
+
+    def append_dot(self) -> None:
+        """
+        Updates the expression, adding new dot
+        """
+        if self.is_DOT:
+            pass
+        else:
+            self.is_DOT = True
+            self.expression += '.'
+            self.total_expression += '.'
+            self.update_label()
+
+    def clear_variables(self) -> None:
+        self.expression = ''
+        self.total_expression = ''
+        self.is_DOT = False
+        self.is_OPERATOR = False
 
     def all_clear(self) -> None:
         """
         Full clears the expression
         """
-        self.expression = ''
-        self.total_expression = ''
+        self.clear_variables()
         self.update_label()
 
     def clear(self) -> None:
@@ -156,6 +191,10 @@ class Calculator_UA:
         """
         self.expression = self.expression[:-1]
         self.total_expression = self.total_expression[:-1]
+        if self.total_expression[-1] == '.':
+            self.is_DOT = False
+        if self.total_expression[-1] in self.operations:
+            self.is_OPERATOR = False
         self.update_label()
 
     def evaluation(self) -> None:
@@ -165,7 +204,7 @@ class Calculator_UA:
         try:
             self.expression = str(eval(self.total_expression))
             self.update_label()
-        except SyntaxError:
+        except BaseException:
             self.expression = 'Error'
             self.update_label()
 
