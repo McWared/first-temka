@@ -1,10 +1,8 @@
 """Main file for Calculator"""
 from tkinter import *
-from tkinter import ttk
-from decimal import Decimal
 
 
-class Calculator_UA:
+class CalculatorUA:
     """Calculator class that defining all stuff"""
 
     def __init__(self) -> None:
@@ -232,5 +230,5 @@ class Calculator_UA:
 
 
 if __name__ == "__main__":
-    calculator_ua = Calculator_UA()
+    calculator_ua = CalculatorUA()
     calculator_ua.run()
