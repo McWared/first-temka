@@ -154,12 +154,7 @@ class CalculatorUA:
         """
         if not self.is_ERROR:
             if value == '(':
-                if self.total_expression[-1] in self.digits or self.total_expression[-1] == ')':
-                    self.total_expression += "*"
-                self.is_OPERATOR = False
-                self.total_expression += str(value)
-                self.expression += str(value)
-                self.update_label()
+                self.first_parentheses_check()
             else:
                 self.is_OPERATOR = False
                 self.expression += str(value)
@@ -185,9 +180,7 @@ class CalculatorUA:
         Updates the expression, adding new dot
         """
         if not self.is_ERROR:
-            if self.is_DOT:
-                pass
-            else:
+            if not self.is_DOT:
                 self.is_DOT = True
                 self.expression += dot
                 self.total_expression += dot
@@ -245,6 +238,13 @@ class CalculatorUA:
             self.is_ERROR = True
             self.update_label()
 
+    def first_parentheses_check(self):
+        if self.total_expression[-1] in self.digits or self.total_expression[-1] == ')':
+            self.total_expression += "*"
+        self.is_OPERATOR = False
+        self.total_expression += str("(")
+        self.expression += str("(")
+        self.update_label()
 
     def run(self) -> None:
         """
