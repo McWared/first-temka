@@ -13,6 +13,7 @@ class CalculatorUA:
         self.window.title('Calculator UA')
         self.expression = ''
         self.total_expression = ''
+        self.is_UNAR_OPERATOR = False
         self.is_OPERATOR = False
         self.is_DOT = False
         # self.is_PARENTHESES = False
@@ -29,6 +30,7 @@ class CalculatorUA:
             0: (4, 2)
         }
         self.operations = {'/': '\u00f7', '*': '\u00d7', '-': '-', '+': '+'}
+        self.unar_operations = {'-': '-', '+': '+'}
 
         self.buttons_frame.rowconfigure(0, weight=1)
         for x in range(1, 5):
@@ -216,20 +218,30 @@ class CalculatorUA:
         """
         try:
             self.expression = str(round(eval(self.total_expression), 10))
+            self.total_expression = self.expression
             self.update_label()
         except BaseException as e:
-            msg_forward = "'(' was never closed"
-            msg_backward = "unmatched ')'"
-            if msg_forward in str(e):
-                self.total_expression += ')'
-                self.evaluation()
-            elif msg_backward in str(e):
-                self.total_expression = '(' + self.total_expression
-                self.evaluation()
-            else:
-                self.expression = 'Error'
-                self.is_ERROR = True
-                self.update_label()
+            self.catch_errors(e)
+
+    def catch_errors(self, e):
+        msg_forward = "'(' was never closed"
+        msg_backward = "unmatched ')'"
+        msg_parentheses = "'int' object is not callable"
+        if msg_forward in str(e):
+            self.total_expression += ')'
+            self.evaluation()
+        elif msg_backward in str(e):
+            self.total_expression = '(' + self.total_expression
+            self.evaluation()
+        elif msg_parentheses in str(e):
+            self.parentheses_without_operators()
+        else:
+            self.expression = 'Error'
+            self.is_ERROR = True
+            self.update_label()
+
+    def parentheses_without_operators(self):
+        pass
 
     def run(self) -> None:
         """
