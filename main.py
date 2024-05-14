@@ -1,6 +1,7 @@
 """Main file for Calculator"""
 from tkinter import *
 from tkinter import ttk
+from decimal import Decimal
 
 class Calculator_UA:
     """Calculator class that defining all stuff"""
@@ -16,6 +17,7 @@ class Calculator_UA:
         self.is_OPERATOR = False
         self.is_DOT = False
         self.is_PARENTHESES = False
+        self.is_ERROR = False
 
         self.calculation_frame = self.create_calculation_frame()
         self.display_label = self.create_display_label()
@@ -102,7 +104,7 @@ class Calculator_UA:
         """
         Creates button for dot
         """
-        button = Button(self.buttons_frame, text='.', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.append_dot())
+        button = Button(self.buttons_frame, text='.', borderwidth=0, font=('Arial', 24, 'bold'), command=lambda: self.append_dot('.'))
         button.grid(row=4, column=3, sticky=NSEW)
         
     def create_parentheses_buttons(self) -> None:
@@ -140,10 +142,10 @@ class Calculator_UA:
         - args: 
             value: str | int
         """
-        self.expression += str(value)
-        self.total_expression += str(value)
-        self.is_OPERATOR = False
-        self.update_label()
+        if not self.is_ERROR:
+            self.expression += str(value)
+            self.total_expression += str(value)
+            self.update_label()
         
     def append_operator(self, symbol, operator) -> None:
         """
@@ -151,32 +153,33 @@ class Calculator_UA:
         - args: 
             operator: str
         """
-        if self.is_OPERATOR:
-            pass
-        else:
-            self.is_OPERATOR = True
-            self.is_DOT = False
-            self.expression += symbol
-            self.total_expression += operator
-            self.update_label()
+        if not self.is_ERROR:
+            if not self.is_OPERATOR:
+                self.is_OPERATOR = True
+                self.is_DOT = False
+                self.expression += symbol
+                self.total_expression += operator
+                self.update_label()
 
-    def append_dot(self) -> None:
+    def append_dot(self, dot) -> None:
         """
         Updates the expression, adding new dot
         """
-        if self.is_DOT:
-            pass
-        else:
-            self.is_DOT = True
-            self.expression += '.'
-            self.total_expression += '.'
-            self.update_label()
+        if not self.is_ERROR:
+            if self.is_DOT:
+                pass
+            else:
+                self.is_DOT = True
+                self.expression += dot
+                self.total_expression += dot
+                self.update_label()
 
     def clear_variables(self) -> None:
         self.expression = ''
         self.total_expression = ''
         self.is_DOT = False
         self.is_OPERATOR = False
+        self.is_ERROR = False
 
     def all_clear(self) -> None:
         """
@@ -189,23 +192,25 @@ class Calculator_UA:
         """
         Deletes the last symbol in the expression
         """
-        self.expression = self.expression[:-1]
-        self.total_expression = self.total_expression[:-1]
-        if self.total_expression[-1] == '.':
-            self.is_DOT = False
-        if self.total_expression[-1] in self.operations:
-            self.is_OPERATOR = False
-        self.update_label()
+        if not self.is_ERROR:
+            self.expression = self.expression[:-1]
+            self.total_expression = self.total_expression[:-1]
+            if self.total_expression[-1] == '.':
+                self.is_DOT = False
+            if self.total_expression[-1] in self.operations:
+                self.is_OPERATOR = False
+            self.update_label()
 
     def evaluation(self) -> None:
         """
         Evaluates the expression
         """
         try:
-            self.expression = str(eval(self.total_expression))
+            self.expression = str(round(eval(self.total_expression), 10))
             self.update_label()
         except BaseException:
             self.expression = 'Error'
+            self.is_ERROR = True
             self.update_label()
 
     def run(self) -> None:
