@@ -24,10 +24,10 @@ class CalculatorUA:
         self.buttons_frame = self.create_buttons_frame()
 
         self.digits = {
-            7: (1, 1), 8: (1, 2), 9: (1, 3),
-            4: (2, 1), 5: (2, 2), 6: (2, 3),
-            1: (3, 1), 2: (3, 2), 3: (3, 3),
-            0: (4, 2)
+            '7': (1, 1), '8': (1, 2), '9': (1, 3),
+            '4': (2, 1), '5': (2, 2), '6': (2, 3),
+            '1': (3, 1), '2': (3, 2), '3': (3, 3),
+            '0': (4, 2)
         }
         self.operations = {'/': '\u00f7', '*': '\u00d7', '-': '-', '+': '+'}
         self.unar_operations = {'-': '-', '+': '+'}
@@ -153,10 +153,18 @@ class CalculatorUA:
             value: str | int
         """
         if not self.is_ERROR:
-            self.is_OPERATOR = False
-            self.expression += str(value)
-            self.total_expression += str(value)
-            self.update_label()
+            if value == '(':
+                if self.total_expression[-1] in self.digits or self.total_expression[-1] == ')':
+                    self.total_expression += "*"
+                self.is_OPERATOR = False
+                self.total_expression += str(value)
+                self.expression += str(value)
+                self.update_label()
+            else:
+                self.is_OPERATOR = False
+                self.expression += str(value)
+                self.total_expression += str(value)
+                self.update_label()
 
     def append_operator(self, symbol, operator) -> None:
         """
