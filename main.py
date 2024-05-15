@@ -146,6 +146,8 @@ class CalculatorUA:
         """
         self.display_label.config(text=self.expression)
 
+#TODO: you cannot place a parenth after a dot
+#TODO: unar minus
     def update_expression(self, value) -> None:
         """
         Updates the expression, adding new symbols to it
@@ -239,12 +241,13 @@ class CalculatorUA:
             self.update_label()
 
     def first_parentheses_check(self):
-        if self.total_expression[-1] in self.digits or self.total_expression[-1] == ')':
-            self.total_expression += "*"
-        self.is_OPERATOR = False
-        self.total_expression += str("(")
-        self.expression += str("(")
-        self.update_label()
+        if self.total_expression[-1] in self.digits or self.total_expression[-1] in self.operations:
+            if self.total_expression[-1] in self.digits or self.total_expression[-1] == ')':
+                self.total_expression += "*"
+            self.is_OPERATOR = False
+            self.total_expression += str("(")
+            self.expression += str("(")
+            self.update_label()
 
     def run(self) -> None:
         """
