@@ -29,6 +29,9 @@ class CalculatorUA:
             '1': (3, 1), '2': (3, 2), '3': (3, 3),
             '0': (4, 2)
         }
+        #TODO: unar operations functionality
+        #TODO: multiplicable operations functionality
+        #TODO: additive operations functionality
         self.operations = {'/': '\u00f7', '*': '\u00d7', '-': '-', '+': '+'}
         self.unar_operations = {'-': '-', '+': '+'}
 
@@ -146,8 +149,6 @@ class CalculatorUA:
         """
         self.display_label.config(text=self.expression)
 
-#TODO: you cannot place a parenth after a dot
-#TODO: unar minus
     def update_expression(self, value) -> None:
         """
         Updates the expression, adding new symbols to it
@@ -207,13 +208,15 @@ class CalculatorUA:
         Deletes the last symbol in the expression
         """
         if not self.is_ERROR:
-            self.expression = self.expression[:-1]
-            self.total_expression = self.total_expression[:-1]
             if self.total_expression[-1] == '.':
                 self.is_DOT = False
             if self.total_expression[-1] in self.operations:
                 self.is_OPERATOR = False
+            self.expression = self.expression[:-1]
+            self.total_expression = self.total_expression[:-1]
             self.update_label()
+            if self.total_expression[-1] == "(":
+                self.is_OPERATOR = True
 
     def evaluation(self) -> None:
         """
@@ -236,15 +239,16 @@ class CalculatorUA:
             self.total_expression = '(' + self.total_expression
             self.evaluation()
         else:
-            self.expression = 'Error'
+            self.expression = f'Error: {e}'
             self.is_ERROR = True
             self.update_label()
 
     def first_parentheses_check(self):
-        if self.total_expression[-1] in self.digits or self.total_expression[-1] in self.operations:
+        if self.total_expression[-1] in self.digits or self.total_expression[-1] in self.operations or self.total_expression[-1] == ')':
             if self.total_expression[-1] in self.digits or self.total_expression[-1] == ')':
                 self.total_expression += "*"
-            self.is_OPERATOR = False
+                self.is_DOT = False
+            self.is_OPERATOR = True
             self.total_expression += str("(")
             self.expression += str("(")
             self.update_label()
