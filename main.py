@@ -208,15 +208,16 @@ class CalculatorUA:
         Deletes the last symbol in the expression
         """
         if not self.is_ERROR:
-            if self.total_expression[-1] == '.':
-                self.is_DOT = False
-            if self.total_expression[-1] in self.operations:
-                self.is_OPERATOR = False
-            self.expression = self.expression[:-1]
-            self.total_expression = self.total_expression[:-1]
-            self.update_label()
-            if self.total_expression[-1] == "(":
-                self.is_OPERATOR = True
+            if self.total_expression:
+                if self.total_expression[-1] == '.':
+                    self.is_DOT = False
+                if self.total_expression[-1] in self.operations:
+                    self.is_OPERATOR = False
+                self.expression = self.expression[:-1]
+                self.total_expression = self.total_expression[:-1]
+                self.update_label()
+                if self.total_expression[-1] == "(":
+                    self.is_OPERATOR = True
 
     def evaluation(self) -> None:
         """
